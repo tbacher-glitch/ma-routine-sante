@@ -1,0 +1,9 @@
+body { font-family: sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 15px 80px 15px 15px; }
+.header { text-align: center; padding: 15px; border-bottom: 1px solid #1e293b; }
+.block { background: #1e293b; border-radius: 12px; padding: 15px; margin-top: 20px; border-left: 4px solid transparent; }
+.active { border-left-color: #38bdf8; background: #243146; }
+h2 { color: #38bdf8; font-size: 1.1em; margin: 0 0 10px 0; border-bottom: 1px solid #334155; }
+.item { display: flex; align-items: flex-start; gap: 10px; margin: 12px 0; }
+input { width: 20px; height: 20px; }
+.fixed-text { font-size: 0.95em; white-space: pre-line; margin-bottom: 5px; }
+b { color: #38bdf8; }
