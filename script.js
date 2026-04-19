@@ -1,8 +1,17 @@
 const today = new Date();
 const dayOfWeek = today.getDay();
 const dayOfMonth = today.getDate();
-const startDate = new Date('2026-04-11');
+
+// --- GESTION DE LA DATE D'INSTALLATION DYNAMIQUE ---
+let installDate = localStorage.getItem('routine_install_date');
+if (!installDate) {
+    installDate = new Date().toISOString();
+    localStorage.setItem('routine_install_date', installDate);
+}
+const startDate = new Date(installDate);
 const diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+// --------------------------------------------------
+
 const cycleJ = ((diffDays % 3) + 1);
 const nextCycleJ = (((diffDays + 1) % 3) + 1);
 
@@ -10,25 +19,50 @@ document.getElementById('date-label').innerText = today.toLocaleDateString('fr-F
 
 // --- CONFIGURATION DES BLOCS ---
 const blocks = [
-    { title: "Starter", time: 0, text: "<b>T-" + (dayOfWeek === 0 || dayOfWeek === 6 ? "60" : "30") + "min :</b> Vitamine B, 1g Taurine, 5g Créatine\n" + "<b>T-15min :</b> Berbérine" },
-    { title: `Petit Dej (Option ${cycleJ === 3 ? 'J3' : 'J1/J2'})`, time: 6, text: "<b>T-15min :</b> 20g Whey, 10g Collagène, Canelle\n" + "<b>T-14min :</b> Psyllum\n" + "<b>T-2min :</b> Cacao " + (cycleJ === 3 ? "" : "+ Germes de blé (1 c.a.s. bombée)") + "\n" + "<b>Final :</b> Noix.<br><b>Jó étvágyat !</b>" },
-    { title: "Exercices Matin", time: 7, items: ["Jambes sur le dos", "SM System"] },
-    { title: "Étirements Matin", time: 9, items: ["Bras tendus/Paumes ouvertes", "Etirements Cou/Panenka", "Encadrement porte"] },
+    { title: "Starter", 
+      time: 0, 
+      text: "<b>Au réveil :</b> Brossage de langue, rincer la brosse entre chaque passage\n" +
+            "<b>T-" + (dayOfWeek === 0 || dayOfWeek === 6 ? "60" : "30") + "min :</b> Vitamine B, 1g Taurine, 5g Créatine\n" +
+            "<b>T-20min :</b> brossage de dents (BioMin F)\n" + 
+            "<b>T-15min :</b> Berbérine" 
+    },
+    { title: "Petit Dej", 
+      time: 6, 
+      text: "<b>T-15min :</b> 20g Whey, 10g Collagène, Canelle\n" + 
+            "<b>T-14min :</b> Psyllium\n" + 
+            "<b>Final :</b> Noix.<br><b>Jó étvágyat !</b><br><br>" +
+            "<b>T+1min :</b> Rinçage de dents à l'eau claire"
+    },
+    { title: "Exercices Matin", 
+      time: 7, 
+      // La ligne 1 reste fixe, la ligne 2 change selon le week-end
+      items: (dayOfWeek === 0 || dayOfWeek === 6) 
+        ? ["Jambes sur le dos", "Activité week-end"] 
+        : ["Jambes sur le dos", "SM System"],
+      // On affiche le détail textuel uniquement le week-end
+      text: (dayOfWeek === 0 || dayOfWeek === 6) ? 
+        "<i style='font-size: 0.9em; color: #94a3b8;'>• 40min marche zone 2\n• Panenka Marie\n• SM System 'full'\n• Bird Dog\n• Spine twist\n• 30-60sec Dead hang\n• 5min 90/90</i>" : ""
+    },
+    { title: "Étirements Matin", time: 9, items: ["Bras tendus/Paumes ouvertes", "Etirements Cou/Panenka", "Encadrement porte", "Grip bureau 3x10sec"] },
     { title: "Déjeuner", time: 11, text: "Berbérine (T-15min), Vitamine D + Omega 3" },
-    { title: "Étirements Après-midi", time: 15, items: ["Bras tendus/Paumes ouvertes", "Etirements Cou/Panenka", "Encadrement porte"] },
-    { title: "Sport Soir", time: 17, items: ["15min 90/90 Reset discal", "15min SM System", "20min Force", "Ischios à l'élastique", "Brique sous les omoplates"] },
-    { title: "Détails Muscu (Info)", time: 17, text: `1. <b>Gobelet Squat :</b> 3x12.\n2. <b>Fentes :</b> 3x20.\n3. <b>Rowing :</b> 3x12/bras.\n4. <b>Pont Fessier :</b> 2x15.\n5. <b>Planche :</b> 5-6 x 10s.` },
+    { title: "Étirements Après-midi", time: 15, items: ["Bras tendus/Paumes ouvertes", "Etirements Cou/Panenka", "Encadrement porte", "Grip bureau 3x10sec"] },
+    { title: "Sport Soir", time: 17, items: ["15min 90/90 Reset discal", "15min SM System + Bird Dog", "20min Force", "Ischios à l'élastique (plier genou, extension maximum)", "Spine twist", "Brique sous les omoplates", "Dead Hang (30-60sec)"] },
+    { title: "Détails Muscu (Info)", time: 17, text: `1. <b>Gobelet Squat :</b> 3x12.\n2. <b>Fentes :</b> 3x20.\n3. <b>Rowing :</b> 3x12/bras.\n4. <b>Pont Fessier :</b> 2x15.\n5. <b>Planche :</b> 3 x 10s. actives.\n6. <b>Swan dive</b>` },
     { title: "Dîner", 
   time: 19, 
   display: (dayOfWeek >= 1 && dayOfWeek <= 4) || dayOfWeek === 0, 
   text: dayOfWeek === 0 ? (dayOfMonth <= 7 ? "Foie de morue" : "Sardines") : 
-    "<b>T-20min :</b> Berbérine (avec un fond d'eau)\n" +
-    "<b>T-15min :</b> Mixer Brocoli avec un fond d'eau\n" +
-    "<b>T-5min :</b> Shot de Brocoli et vinaigre avec 250ml d'eau (bouclier)\n" +
-    "<b>T-0 :</b> Assiette de pâtes (1 c.a.s levure + 2 c.a.c lin)\n" +
-    "<b>Pendant :</b> Omega 3" },
-    { title: "Préparation Petit Dej", time: 20, items: ["Préparation terminée"], text: "• <b>Base :</b> " + (Math.floor(diffDays / 7) % 4 === 3 ? "Orge/Sarrasin" : "Son d'avoine") + "\n• <b>Graines :</b> Graines de chia et lin" + (nextCycleJ === 3 ? " + 2 c.a.c de courge" : "") + "\n• <b>Fruit :</b> " + (dayOfWeek === 0 ? "Pomme" : "Myrtilles") + "\n• <b>Liquide :</b> Kéfir + Podmasli" },
-    { title: "Soir", time: 21, text: "Magnesium\nFil dentaire et brosse interdentaire\nExercice jambes sur le dos\nDormir avec la couette entre les genoux" }
+    "<b>T-20min (ou avant) :</b> mixer brocoli\n" +
+        "<b>T-15min :</b> berbérine\n" +
+        "<b>T-10min (pâtes dans l'eau) :</b> vinaigre (2c.a.c. + 200ml à la paille) + 2 c.a.c. de lin + yaourt\n" +
+        "<b>T-9min :</b> shot de brocoli\n" +
+        "<b>T-0min :</b> pâtes + 1,5 c.a.s. levure + omega 3\n\n" +
+       "<i style='font-size: 0.9em; color: #94a3b8;'>Brocoli (cellulaire), Vinaigre (enzymatique), Lin (mécanique), Levure (métabolique)</i><br><br>" +
+        "<b>T+2 :</b> rinçage alcalin (100ml d'eau tiède + 1/2 cac de bicarbonate de soude), ne pas rincer<br><br>" +
+        "<b>T+45 :</b> " + (cycleJ === 3 ? "3cac bombées de graines de courges moulues" : "20g de germes de blé moulues") + " + 100g yaourt + 50g kéfir" 
+    },
+    { title: "Préparation Petit Dej", time: 20, items: ["Préparation terminée"], text: "• <b>Base :</b> " + (Math.floor(diffDays / 7) % 4 === 3 ? "Orge/Sarrasin" : "Son d'avoine") + "\n• <b>Graines :</b> Graines de chia et lin" + (nextCycleJ === 3 ? " + 2 c.a.c de courge" : "") + "\n• <b>Fruit :</b> " + (dayOfWeek === 6 ? "Pomme" : "Myrtilles") + "\n• <b>Liquide :</b> Kéfir + Podmasli" },
+    { title: "Soir", time: 21, text: "Magnesium\nHerbadent, fil dentaire et brosse interdentaire\nBain de bouche 1j/2\nExercice jambes sur le dos\nDormir avec la couette entre les genoux" }
 ];
 
 // --- MOTEUR DE STATISTIQUES ---
@@ -49,6 +83,8 @@ function logActivity(title) {
 function getStats(title) {
     const history = JSON.parse(localStorage.getItem('routine_stats') || "{}");
     const dates = history[title] || [];
+    
+    // Si aucune date n'est enregistrée pour ce bloc, on renvoie 0 partout
     if (dates.length === 0) return { streak: 0, rate: 0 };
 
     // Streak
@@ -59,9 +95,10 @@ function getStats(title) {
         curr.setDate(curr.getDate() - 1);
     }
 
-    // Rate (sur les 100 derniers jours de l'historique global)
-    const last100 = dates.slice(-100);
-    const rate = Math.round((last100.length / (diffDays + 1)) * 100);
+    // Rate dynamique
+    const daysSinceInstall = Math.max(diffDays + 1, 1);
+    const rate = Math.round((dates.length / daysSinceInstall) * 100);
+    
     return { streak, rate: Math.min(rate, 100) };
 }
 
@@ -92,11 +129,17 @@ blocks.forEach((b) => {
     if (b.display === false) return;
     const div = document.createElement('div');
     div.className = 'block' + (today.getHours() >= b.time ? ' active' : '');
+    
     let html = `<h2>${b.title}</h2>`;
-    if (b.text) html += `<div class="fixed-text">${b.text}</div>`;
+    
+    // 1. On affiche d'abord les cases à cocher
     if (b.items) b.items.forEach(it => { 
         html += `<label class="item"><input type="checkbox" onchange="logActivity('${b.title}')"><span>${it}</span></label>`; 
     });
+    
+    // 2. On affiche ensuite le texte informatif en dessous
+    if (b.text) html += `<div class="fixed-text" style="margin-top: 10px;">${b.text}</div>`;
+    
     div.innerHTML = html;
     container.appendChild(div);
 });
