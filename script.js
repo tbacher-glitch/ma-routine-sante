@@ -2,13 +2,15 @@ const today = new Date();
 const dayOfWeek = today.getDay();
 const dayOfMonth = today.getDate();
 
-// --- GESTION DE LA DATE D'INSTALLATION DYNAMIQUE ---
-let installDate = localStorage.getItem('routine_install_date');
-if (!installDate) {
-    installDate = new Date().toISOString();
-    localStorage.setItem('routine_install_date', installDate);
+const todayStr = today.toLocaleDateString('en-CA'); 
+
+let installDateStr = localStorage.getItem('routine_install_date');
+if (!installDateStr) {
+    installDateStr = todayStr;
+    localStorage.setItem('routine_install_date', installDateStr);
 }
-const startDate = new Date(installDate);
+
+const startDate = new Date(installDateStr);
 const diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
 // --------------------------------------------------
 
@@ -71,7 +73,6 @@ const trackedBlocks = ["Exercices Matin", "Étirements Matin", "Étirements Apr�
 function logActivity(title) {
     if (!trackedBlocks.includes(title)) return;
     let history = JSON.parse(localStorage.getItem('routine_stats') || "{}");
-    const todayStr = new Date().toISOString().split('T')[0];
     if (!history[title]) history[title] = [];
     if (!history[title].includes(todayStr)) {
         history[title].push(todayStr);
@@ -83,22 +84,25 @@ function logActivity(title) {
 function getStats(title) {
     const history = JSON.parse(localStorage.getItem('routine_stats') || "{}");
     const dates = history[title] || [];
-    
-    // Si aucune date n'est enregistrée pour ce bloc, on renvoie 0 partout
     if (dates.length === 0) return { streak: 0, rate: 0 };
 
-    // Streak
     let streak = 0;
-    let curr = new Date();
-    while (dates.includes(curr.toISOString().split('T')[0])) {
-        streak++;
-        curr.setDate(curr.getDate() - 1);
+    let checkDate = new Date();
+    let checkStr = checkDate.toLocaleDateString('en-CA');
+
+    if (!dates.includes(checkStr)) {
+        checkDate.setDate(checkDate.getDate() - 1);
+        checkStr = checkDate.toLocaleDateString('en-CA');
     }
 
-    // Rate dynamique
-    const daysSinceInstall = Math.max(diffDays + 1, 1);
+    while (dates.includes(checkStr)) {
+        streak++;
+        checkDate.setDate(checkDate.getDate() - 1);
+        checkStr = checkDate.toLocaleDateString('en-CA');
+    }
+
+    const daysSinceInstall = diffDays + 1;
     const rate = Math.round((dates.length / daysSinceInstall) * 100);
-    
     return { streak, rate: Math.min(rate, 100) };
 }
 
@@ -129,33 +133,27 @@ blocks.forEach((b) => {
     if (b.display === false) return;
     const div = document.createElement('div');
     div.className = 'block' + (today.getHours() >= b.time ? ' active' : '');
-    
     let html = `<h2>${b.title}</h2>`;
-    
-    // 1. On affiche d'abord les cases à cocher
     if (b.items) b.items.forEach(it => { 
         html += `<label class="item"><input type="checkbox" onchange="logActivity('${b.title}')"><span>${it}</span></label>`; 
     });
-    
-    // 2. On affiche ensuite le texte informatif en dessous
     if (b.text) html += `<div class="fixed-text" style="margin-top: 10px;">${b.text}</div>`;
-    
     div.innerHTML = html;
     container.appendChild(div);
 });
 
+document.querySelectorAll('input[type="checkbox"]').forEach(cb => { cb.checked = false; });
+
 renderStats();
+
 function scrollToCurrentTask() {
     const activeBlocks = document.querySelectorAll('.block.active');
     if (activeBlocks.length > 0) {
         const currentBlock = activeBlocks[activeBlocks.length - 1];
         setTimeout(() => {
-            currentBlock.scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'center' 
-            });
+            currentBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 500);
     }
 }
-
 scrollToCurrentTask();
+document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
