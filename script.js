@@ -48,9 +48,9 @@ const blocks = [
       text: (dayOfWeek === 0 || dayOfWeek === 6) ? 
         "<i style='font-size: 0.9em; color: #94a3b8;'>• 40min marche zone 2\n• Panenka Marie\n• SM System 'full'\n• Bird Dog\n• Spine twist\n• 30-60sec Dead hang\n• 5min 90/90</i>" : ""
     },
-    { title: "Étirements Matin", time: 9, items: ["Bras tendus/Paumes ouvertes", "Etirements Cou/Panenka", "Encadrement porte", "Grip bureau 3x10sec"] },
+    { title: "Étirements Matin", time: 9, items: ["Bras tendus/Paumes ouvertes", "Etirements Cou/Panenka", "Encadrement porte", "Grip bureau 3x10sec", "Ronds de la tête"] },
     { title: "Déjeuner", time: 11, text: "Berbérine (T-15min), Vitamine D + Omega 3" },
-    { title: "Étirements Après-midi", time: 15, items: ["Bras tendus/Paumes ouvertes", "Etirements Cou/Panenka", "Encadrement porte", "Grip bureau 3x10sec"] },
+    { title: "Étirements Après-midi", time: 15, items: ["Bras tendus/Paumes ouvertes", "Etirements Cou/Panenka", "Encadrement porte", "Grip bureau 3x10sec", "Ronds de la tête"] },
     { title: "Sport Soir", time: 17, items: ["15min 90/90 Reset discal", "15min SM System + Bird Dog", "20min Force", "Ischios à l'élastique (plier genou, extension maximum)", "Spine twist", "Brique sous les omoplates", "Dead Hang (30-60sec)"] },
     { title: "Détails Muscu (Info)", time: 17, text: `1. <b>Gobelet Squat :</b> 3x12.\n2. <b>Fentes :</b> 3x20.\n3. <b>Rowing :</b> 3x12/bras.\n4. <b>Pont Fessier :</b> 2x15.\n5. <b>Planche :</b> 3 x 10s. actives.\n6. <b>Swan dive</b>` },
     { title: "Dîner", 
