@@ -1,8 +1,11 @@
+localStorage.clear()
 const today = new Date();
 const dayOfWeek = today.getDay();
 const dayOfMonth = today.getDate();
 
-const todayStr = today.toLocaleDateString('en-CA'); 
+// Création d'une date "propre" (sans heure) pour aujourd'hui
+const todayClean = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+const todayStr = todayClean.toISOString().split('T')[0];
 
 let installDateStr = localStorage.getItem('routine_install_date');
 if (!installDateStr) {
@@ -10,8 +13,9 @@ if (!installDateStr) {
     localStorage.setItem('routine_install_date', installDateStr);
 }
 
-const startDate = new Date(installDateStr);
-const diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+// Calcul du nombre de jours réels écoulés
+const installDate = new Date(installDateStr);
+const diffDays = Math.round((todayClean - installDate) / (1000 * 60 * 60 * 24));
 // --------------------------------------------------
 
 const cycleJ = ((diffDays % 3) + 1);
@@ -25,7 +29,7 @@ const blocks = [
       time: 0, 
       text: "<b>Au réveil :</b> Brossage de langue, rincer la brosse entre chaque passage\n" +
             "<b>T-" + (dayOfWeek === 0 || dayOfWeek === 6 ? "60" : "30") + "min :</b> Vitamine B, 1g Taurine, 5g Créatine\n" +
-            "<b>T-20min :</b> brossage de dents (BioMin F)\n" + 
+            "<b>T-20min :</b> Brossage de dents (BioMin F)\n" + 
             "<b>T-15min :</b> Berbérine" 
     },
     { title: "Petit Dej", 
@@ -54,12 +58,10 @@ const blocks = [
   time: 19, 
   display: (dayOfWeek >= 1 && dayOfWeek <= 4) || dayOfWeek === 0, 
   text: dayOfWeek === 0 ? (dayOfMonth <= 7 ? "Foie de morue" : "Sardines") : 
-    "<b>T-20min (ou avant) :</b> mixer brocoli\n" +
-        "<b>T-15min :</b> berbérine\n" +
+    "<b>T-15min :</b> berbérine\n" +
         "<b>T-10min (pâtes dans l'eau) :</b> vinaigre (2c.a.c. + 200ml à la paille) + 2 c.a.c. de lin + yaourt\n" +
-        "<b>T-9min :</b> shot de brocoli\n" +
         "<b>T-0min :</b> pâtes + 1,5 c.a.s. levure + omega 3\n\n" +
-       "<i style='font-size: 0.9em; color: #94a3b8;'>Brocoli (cellulaire), Vinaigre (enzymatique), Lin (mécanique), Levure (métabolique)</i><br><br>" +
+       "<i style='font-size: 0.9em; color: #94a3b8;'>Vinaigre (enzymatique), Lin (mécanique), Levure (métabolique)</i><br><br>" +
         "<b>T+2 :</b> rinçage alcalin (100ml d'eau tiède + 1/2 cac de bicarbonate de soude), ne pas rincer<br><br>" +
         "<b>T+45 :</b> " + (cycleJ === 3 ? "3cac bombées de graines de courges moulues" : "20g de germes de blé moulues") + " + 100g yaourt + 50g kéfir" 
     },
@@ -84,25 +86,29 @@ function logActivity(title) {
 function getStats(title) {
     const history = JSON.parse(localStorage.getItem('routine_stats') || "{}");
     const dates = history[title] || [];
-    if (dates.length === 0) return { streak: 0, rate: 0 };
+    
+    // On calcule le nombre de jours total (minimum 1)
+    const totalPossibleDays = diffDays + 1;
+    
+    // Le taux est : (nombre de jours cochés / nombre de jours depuis install)
+    const rate = Math.round((dates.length / totalPossibleDays) * 100);
 
     let streak = 0;
-    let checkDate = new Date();
-    let checkStr = checkDate.toLocaleDateString('en-CA');
+    let checkDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    let checkStr = checkDate.toISOString().split('T')[0];
 
+    // Si pas coché aujourd'hui, on vérifie si la série était maintenue jusqu'à hier
     if (!dates.includes(checkStr)) {
         checkDate.setDate(checkDate.getDate() - 1);
-        checkStr = checkDate.toLocaleDateString('en-CA');
+        checkStr = checkDate.toISOString().split('T')[0];
     }
 
     while (dates.includes(checkStr)) {
         streak++;
         checkDate.setDate(checkDate.getDate() - 1);
-        checkStr = checkDate.toLocaleDateString('en-CA');
+        checkStr = checkDate.toISOString().split('T')[0];
     }
 
-    const daysSinceInstall = diffDays + 1;
-    const rate = Math.round((dates.length / daysSinceInstall) * 100);
     return { streak, rate: Math.min(rate, 100) };
 }
 
