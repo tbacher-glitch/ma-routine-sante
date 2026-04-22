@@ -25,10 +25,12 @@ document.getElementById('date-label').innerText = today.toLocaleDateString('fr-F
 // --- CONFIGURATION DES BLOCS ---
 const blocks = [
     { title: "Starter", 
-      time: 0, 
-      text: "<b>Au réveil :</b> Brossage de langue, rincer la brosse entre chaque passage\n" +
-            "<b>T-" + (dayOfWeek === 0 || dayOfWeek === 6 ? "60" : "30") + "min :</b> Vitamine B, 1g Taurine, 5g Créatine\n" +
-            "<b>T-20min :</b> Brossage de dents (BioMin F)\n" + 
+      time: 0,
+      text: "<b>Réveil :</b> Brossage de langue, rincer la brosse entre chaque passage\n" +
+            (dayOfWeek === 0 || dayOfWeek === 6 
+                ? "<b>T-60min :</b> Vitamine B, 1g Taurine, 5g Créatine\n" 
+                : "<b>T-30min :</b>Si réunion à 11h : Vit B + 1g Taurine, 5g Créatine\n") +
+            "<b>T-20min :</b> Brossage de dents (BioMin F)\n" +
             "<b>T-15min :</b> Berbérine" 
     },
     { title: "Petit Dej", 
@@ -49,7 +51,10 @@ const blocks = [
         "<i style='font-size: 0.9em; color: #94a3b8;'>• 40min marche zone 2\n• Panenka Marie\n• SM System 'full'\n• Bird Dog\n• Spine twist\n• 30-60sec Dead hang\n• 5min 90/90</i>" : ""
     },
     { title: "Étirements Matin", time: 9, items: ["Bras tendus/Paumes ouvertes", "Etirements Cou/Panenka", "Encadrement porte", "Grip bureau 3x10sec", "Ronds de la tête"] },
-    { title: "Déjeuner", time: 11, text: "Berbérine (T-15min), Vitamine D + Omega 3" },
+    { title: "Déjeuner", time: 11, 
+      text: (dayOfWeek === 0 || dayOfWeek === 6)
+        ? "Berbérine (T-15min), Vitamine D + Omega 3"
+        : "11h : vitamine B + Mg + creatine + taurine avec un grand verre d'eau<br><br>Berbérine (T-15min), Vitamine D + Omega 3" },
     { title: "Étirements Après-midi", time: 15, items: ["Bras tendus/Paumes ouvertes", "Etirements Cou/Panenka", "Encadrement porte", "Grip bureau 3x10sec", "Ronds de la tête"] },
     { title: "Sport Soir", time: 17, items: ["15min 90/90 Reset discal", "15min SM System + Bird Dog", "20min Force", "Ischios à l'élastique (plier genou, extension maximum)", "Spine twist", "Brique sous les omoplates", "Dead Hang (30-60sec)"] },
     { title: "Détails Muscu (Info)", time: 17, text: `1. <b>Gobelet Squat :</b> 3x12.\n2. <b>Fentes :</b> 3x20.\n3. <b>Rowing :</b> 3x12/bras.\n4. <b>Pont Fessier :</b> 2x15.\n5. <b>Planche :</b> 3 x 10s. actives.\n6. <b>Swan dive</b>` },
@@ -58,13 +63,23 @@ const blocks = [
   display: (dayOfWeek >= 1 && dayOfWeek <= 4) || dayOfWeek === 0, 
   text: dayOfWeek === 0 ? (dayOfMonth <= 7 ? "Foie de morue" : "Sardines") : 
     "<b>T-15min :</b> berbérine\n" +
-        "<b>T-10min (pâtes dans l'eau) :</b> vinaigre (2c.a.c. + 200ml à la paille) + 2 c.a.c. de lin + yaourt\n" +
+        "<b>T-10min (pâtes dans l'eau) :</b>2 c.a.c. de lin + yaourt\n" +"<b>T-5/T-2min :</b> vinaigre (2c.a.c. + 200ml à la paille)\n" +
         "<b>T-0min :</b> pâtes + 1,5 c.a.s. levure + omega 3\n\n" +
        "<i style='font-size: 0.9em; color: #94a3b8;'>Vinaigre (enzymatique), Lin (mécanique), Levure (métabolique)</i><br><br>" +
         "<b>T+2 :</b> rinçage alcalin (100ml d'eau tiède + 1/2 cac de bicarbonate de soude), ne pas rincer<br><br>" +
         "<b>T+45 :</b> " + (cycleJ === 3 ? "3cac bombées de graines de courges moulues" : "20g de germes de blé moulues") + " + 100g yaourt + 50g kéfir" 
     },
-    { title: "Préparation Petit Dej", time: 20, items: ["Préparation terminée"], text: "• <b>Base :</b> " + (Math.floor(diffDays / 7) % 4 === 3 ? "Orge/Sarrasin" : "Son d'avoine") + "\n• <b>Graines :</b> Graines de chia et lin" + (nextCycleJ === 3 ? " + 2 c.a.c de courge" : "") + "\n• <b>Fruit :</b> " + (dayOfWeek === 6 ? "Pomme" : "Myrtilles") + "\n• <b>Liquide :</b> Kéfir + Podmasli" },
+    { title: "Préparation Petit Dej", 
+      time: 20, 
+      items: ["Préparation terminée"], 
+      text: "• <b>Base :</b> " + (Math.floor(diffDays / 7) % 4 === 3 ? "Orge/Sarrasin" : "Son d'avoine") + 
+            "\n• <b>Graines :</b> Graines de chia et lin" + (nextCycleJ === 3 ? " + 2 c.a.c de courge" : "") + 
+            "\n• <b>Fruit :</b> " + (dayOfWeek === 6 ? "Pomme" : "Myrtilles") + 
+            "\n• <b>Liquide :</b> Kéfir + Podmasli" +
+            (dayOfWeek >= 0 && dayOfWeek <= 4 
+              ? "<br><br>• <b>Prépa D+1 :</b> Vit B + Mg + Vit D + Omega 3 + poudres (créatine/taurine)" 
+              : "")
+    },
     { title: "Soir", time: 21, text: "Magnesium\nHerbadent, fil dentaire et brosse interdentaire\nBain de bouche 1j/2\nExercice jambes sur le dos\nDormir avec la couette entre les genoux" }
 ];
 
