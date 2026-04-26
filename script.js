@@ -1,4 +1,3 @@
-localstorage.clear();
 const today = new Date();
 const dayOfWeek = today.getDay();
 const dayOfMonth = today.getDate();
