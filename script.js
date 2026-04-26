@@ -28,10 +28,10 @@ const blocks = [
       time: 0,
       text: "<b>Réveil :</b> Brossage de langue, rincer la brosse entre chaque passage\n" +
             (dayOfWeek === 0 || dayOfWeek === 6 
-                ? "<b>T-60min :</b> Vitamine B, 1g Taurine, 5g Créatine\n" 
-                : "<b>T-30min :</b>Si réunion à 11h : Vit B + 1g Taurine, 5g Créatine\n") +
+                ? "<b>T-60min MINI :</b> Vitamine B, 1,5g Taurine, 5g Créatine\n" 
+                : "<b>T-30min :</b>Si réunion à 11h : Vit B + 1,5g Taurine, 5g Créatine\n") +
             "<b>T-20min :</b> Brossage de dents (BioMin F)\n" +
-            "<b>T-15min :</b> Berbérine" 
+            "<b>T-20min :</b> Berbérine" 
     },
     { title: "Petit Dej", 
       time: 6, 
