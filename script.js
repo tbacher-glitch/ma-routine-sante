@@ -12,24 +12,27 @@ if (!installDateStr) {
     localStorage.setItem('routine_install_date', installDateStr);
 }
 
-// Calcul du nombre de jours réels écoulés
 const installDate = new Date(installDateStr);
 const diffDays = Math.round((todayClean - installDate) / (1000 * 60 * 60 * 24));
-// --------------------------------------------------
 
 const cycleJ = ((diffDays % 3) + 1);
 const nextCycleJ = (((diffDays + 1) % 3) + 1);
 
+// Logique pour l'alternance hebdomadaire de la base (Sarrasin / Son d'avoine)
+// Référence : Lundi 4 mai 2026 = Semaine Sarrasin
+const refMonday = new Date(2026, 4, 4); 
+const weekOffset = Math.floor(Math.floor((todayClean - refMonday) / (24 * 60 * 60 * 1000)) / 7);
+const currentBase = (Math.abs(weekOffset) % 2 === 0) ? "Sarrasin" : "Son d'avoine";
+
 document.getElementById('date-label').innerText = today.toLocaleDateString('fr-FR', {weekday: 'long', day: 'numeric', month: 'long'});
 
-// --- CONFIGURATION DES BLOCS ---
 const blocks = [
     { title: "Starter", 
       time: 0,
       text: "<b>Réveil :</b> Brossage de langue, rincer la brosse entre chaque passage\n" +
             (dayOfWeek === 0 || dayOfWeek === 6 
                 ? "<b>T-60min MINI :</b> Vitamine B, 1,5g Taurine, 5g Créatine\n" 
-                : "<b>T-30min :</b>Si réunion à 11h : Vit B + 1,5g Taurine, 5g Créatine\n") +
+                : "<b>T-30min :</b> 5g créatine + 1,5g + 2g TMG (+ vitamine B si pas possible en journée)\n") +
             "<b>T-20min :</b> Brossage de dents (BioMin F)\n" +
             "<b>T-20min :</b> Berbérine" 
     },
@@ -42,39 +45,38 @@ const blocks = [
     },
     { title: "Exercices Matin", 
       time: 7, 
-      // La ligne 1 reste fixe, la ligne 2 change selon le week-end
       items: (dayOfWeek === 0 || dayOfWeek === 6) 
         ? ["Jambes sur le dos", "Activité week-end"] 
         : ["Jambes sur le dos", "SM System"],
-      // On affiche le détail textuel uniquement le week-end
-      text: (dayOfWeek === 0 || dayOfWeek === 6) ? 
-        "<i style='font-size: 0.9em; color: #94a3b8;'>• 40min marche zone 2\n• Panenka Marie\n• SM System 'full'\n• Bird Dog\n• Spine twist\n• 30-60sec Dead hang\n• 5min 90/90</i>" : ""
+      text: (dayOfWeek === 0 || dayOfWeek === 6) ?
+            "<i style='font-size: 0.9em; color: #94a3b8;'>• 40min marche zone 2\n• Panenka Marie\n• SM System 'full'\n• Bird Dog\n• Spine twist\n• 30-60sec Dead hang\n• 5min 90/90</i>" : ""
     },
     { title: "Étirements Matin", time: 9, items: ["Bras tendus/Paumes ouvertes", "Etirements Cou/Panenka", "Encadrement porte", "Grip bureau 3x10sec", "Ronds de la tête"] },
     { title: "Déjeuner", time: 11, 
       text: (dayOfWeek === 0 || dayOfWeek === 6)
         ? "Berbérine (T-15min), Vitamine D + Omega 3"
-        : "11h : vitamine B + Mg + creatine + taurine avec un grand verre d'eau<br><br>Berbérine (T-15min), Vitamine D + Omega 3" },
+        : "11h : vitamine B + Mg avec un grand verre d'eau<br><br>Berbérine (T-15min), Vitamine D + Omega 3" },
     { title: "Étirements Après-midi", time: 15, items: ["Bras tendus/Paumes ouvertes", "Etirements Cou/Panenka", "Encadrement porte", "Grip bureau 3x10sec", "Ronds de la tête"] },
     { title: "Sport Soir", time: 17, items: ["15min 90/90 Reset discal", "15min SM System + Bird Dog", "20min Force", "Ischios à l'élastique (plier genou, extension maximum)", "Spine twist", "Brique sous les omoplates", "Dead Hang (30-60sec)"] },
-    { title: "Détails Muscu (Info)", time: 17, text: `1. <b>Gobelet Squat :</b> 3x12.\n2. <b>Fentes :</b> 3x20.\n3. <b>Rowing :</b> 3x12/bras.\n4. <b>Pont Fessier :</b> 2x15.\n5. <b>Planche :</b> 3 x 10s. actives.\n6. <b>Swan dive</b>` },
+    { title: "Détails Force (Info)", time: 17, text: `1. <b>Gobelet Squat :</b> 3x12.\n2. <b>Fentes :</b> 3x20.\n3. <b>Rowing :</b> 3x12/bras.\n4. <b>Pont Fessier :</b> 2x15.\n5. <b>Planche :</b> 3 x 10s. actives.\n6. <b>Swan dive</b>` },
     { title: "Dîner", 
-  time: 19, 
-  display: (dayOfWeek >= 1 && dayOfWeek <= 4) || dayOfWeek === 0, 
-  text: dayOfWeek === 0 ? (dayOfMonth <= 7 ? "Foie de morue" : "Sardines") : 
-    "<b>T-15min :</b> berbérine\n" +
-        "<b>T-10min (pâtes dans l'eau) :</b>2 c.a.c. de lin + yaourt\n" +"<b>T-5/T-2min :</b> vinaigre (2c.a.c. + 200ml à la paille)\n" +
-        "<b>T-0min :</b> pâtes + 1,5 c.a.s. levure + omega 3\n\n" +
-       "<i style='font-size: 0.9em; color: #94a3b8;'>Vinaigre (enzymatique), Lin (mécanique), Levure (métabolique)</i><br><br>" +
-        "<b>T+2 :</b> rinçage alcalin (100ml d'eau tiède + 1/2 cac de bicarbonate de soude), ne pas rincer<br><br>" +
-        "<b>T+45 :</b> " + (cycleJ === 3 ? "3cac bombées de graines de courges moulues" : "20g de germes de blé moulues") + " + 100g yaourt + 50g kéfir" 
+      time: 19, 
+      display: (dayOfWeek >= 1 && dayOfWeek <= 4) || dayOfWeek === 0, 
+      text: dayOfWeek === 0 ?
+            (dayOfMonth <= 7 ? "Foie de morue" : "Sardines") : 
+            "<b>T-15min :</b> berbérine\n" +
+            "<b>T-10min (pâtes dans l'eau) :</b>2 c.a.c. de lin + yaourt\n" +"<b>T-5/T-2min :</b> vinaigre (2c.a.c. + 200ml à la paille)\n" +
+            "<b>T-0min :</b> pâtes + 1,5 c.a.s. levure + omega 3\n\n" +
+            "<i style='font-size: 0.9em; color: #94a3b8;'>Vinaigre (enzymatique), Lin (mécanique), Levure (métabolique)</i><br><br>" +
+            "<b>T+2 :</b> rinçage alcalin (100ml d'eau tiède + 1/2 cac de bicarbonate de soude), ne pas rincer<br><br>" +
+            "<b>T+45 :</b> " + (cycleJ === 3 ? "3cac bombées de graines de courges moulues" : "20g de germes de blé moulues") + " + 100g yaourt + 50g kéfir" 
     },
     { title: "Préparation Petit Dej", 
       time: 20, 
       items: ["Préparation terminée"], 
-      text: "• <b>Base :</b> " + (Math.floor(diffDays / 7) % 4 === 3 ? "Orge/Sarrasin" : "Son d'avoine") + 
+      text: "• <b>Base :</b> " + currentBase + 
             "\n• <b>Graines :</b> Graines de chia et lin" + (nextCycleJ === 3 ? " + 2 c.a.c de courge" : "") + 
-            "\n• <b>Fruit :</b> " + (dayOfWeek === 6 ? "Pomme" : "Myrtilles") + 
+            "\n• <b>Fruit :</b> Myrtilles" + 
             "\n• <b>Liquide :</b> Kéfir + Podmasli" +
             (dayOfWeek >= 0 && dayOfWeek <= 4 
               ? "<br><br>• <b>Prépa D+1 :</b> Vit B + Mg + Vit D + Omega 3 + poudres (créatine/taurine)" 
@@ -83,8 +85,8 @@ const blocks = [
     { title: "Soir", time: 21, text: "Magnesium\nHerbadent, fil dentaire et brosse interdentaire\nBain de bouche 1j/2\nExercice jambes sur le dos\nDormir avec la couette entre les genoux" }
 ];
 
-// --- MOTEUR DE STATISTIQUES ---
 const trackedBlocks = ["Exercices Matin", "Étirements Matin", "Étirements Après-midi", "Sport Soir", "Préparation Petit Dej"];
+const container = document.getElementById('routine-container');
 
 function logActivity(title) {
     if (!trackedBlocks.includes(title)) return;
@@ -100,18 +102,12 @@ function logActivity(title) {
 function getStats(title) {
     const history = JSON.parse(localStorage.getItem('routine_stats') || "{}");
     const dates = history[title] || [];
-    
-    // On calcule le nombre de jours total (minimum 1)
     const totalPossibleDays = diffDays + 1;
-    
-    // Le taux est : (nombre de jours cochés / nombre de jours depuis install)
     const rate = Math.round((dates.length / totalPossibleDays) * 100);
-
     let streak = 0;
     let checkDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     let checkStr = checkDate.toISOString().split('T')[0];
 
-    // Si pas coché aujourd'hui, on vérifie si la série était maintenue jusqu'à hier
     if (!dates.includes(checkStr)) {
         checkDate.setDate(checkDate.getDate() - 1);
         checkStr = checkDate.toISOString().split('T')[0];
@@ -122,7 +118,6 @@ function getStats(title) {
         checkDate.setDate(checkDate.getDate() - 1);
         checkStr = checkDate.toISOString().split('T')[0];
     }
-
     return { streak, rate: Math.min(rate, 100) };
 }
 
@@ -147,8 +142,6 @@ function renderStats() {
     statsDiv.innerHTML = html;
 }
 
-// --- AFFICHAGE ---
-const container = document.getElementById('routine-container');
 blocks.forEach((b) => {
     if (b.display === false) return;
     const div = document.createElement('div');
@@ -161,8 +154,6 @@ blocks.forEach((b) => {
     div.innerHTML = html;
     container.appendChild(div);
 });
-
-document.querySelectorAll('input[type="checkbox"]').forEach(cb => { cb.checked = false; });
 
 renderStats();
 
