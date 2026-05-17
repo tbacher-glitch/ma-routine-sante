@@ -32,7 +32,7 @@ function updateApp(selectedDate) {
     document.getElementById('date-label').innerText = d.toLocaleDateString('fr-FR', {weekday: 'long', day: 'numeric', month: 'long'});
 
     const blocks = [
-        { title: "Starter", time: 0, text: "<b>Réveil :</b> Brossage de langue\n" + (dOfWeek === 0 || dOfWeek === 6 ? "<b>T-60min :</b> Vitamine B, Magnesium, 1,5g Taurine, 5g Créatine, 3g TMG\n" : "<b>T-30min :</b> 5g créatine + 1,5g + 2g TMG (+ vitamine B si pas possible en journée)\n Bu avec deux verres d'eau pour pousser avant psyllium\n") + "<b>T-20min :</b> Brossage de dent (BioMin F)" },
+        { title: "Starter", time: 0, text: "<b>Réveil :</b> Brossage de langue\n" + (dOfWeek === 0 || dOfWeek === 6 ? "<b>T-60min :</b> Vitamine B, Magnesium, 1,5g Taurine, 5g Créatine, 3g TMG\nAvec un grand verre d'eau citronnée\n" : "<b>T-30min :</b> 5g créatine + 1,5g + 2g TMG (+ vitamine B si pas possible en journée)\n Bu avec deux verres d'eau citronnée pour pousser avant psyllium\n") + "<b>T-20min :</b> Brossage de dent (BioMin F)" },
         { title: "Petit Dej", time: 8, text: "<b>T-15min :</b> 20g Whey, 10g Collagène, Canelle\n<b>T-10min :</b> 10g Psyllium\n<b>Final :</b> Noix.<br><b>Jó étvágyat !</b>" },
         { title: "Exercices Matin", time: 9, items: (dOfWeek === 0 || dOfWeek === 6) ? ["Jambes sur le dos", "Activité week-end"] : ["Jambes sur le dos", "SM System"], text: (dOfWeek === 0 || dOfWeek === 6) ? "<i style='font-size: 0.9em; color: #94a3b8;'>• 40min marche Z2 • (90/90 (5-10min)) • SM System full • Etirements quadriceps • (Etirements ischios / mollets) • (Spine twist (2x5 de chaque côté)) • Bird Dog (2x10) • Dead hang (30-60sec) • (Panenka)</i>" : "" },
         { title: "CHIN TUCK!!!", time: 9.5, text: "Posture cervicale", isUrgent: true },
@@ -184,6 +184,12 @@ function scrollToCurrentTask() {
             currentBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 500);
     }
+}
+
+updateApp(todayClean);
+renderNav();
+
+
 }
 
 updateApp(todayClean);
