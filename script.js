@@ -189,9 +189,3 @@ function scrollToCurrentTask() {
 updateApp(todayClean);
 renderNav();
 
-
-}
-
-updateApp(todayClean);
-renderNav();
-
