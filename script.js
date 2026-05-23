@@ -22,43 +22,41 @@ function updateApp(selectedDate) {
     const isNextMonday = (dOfWeek === 1 && dOfMonth >= 2 && dOfMonth <= 8);
     const isMoruePeriod = isMorueSunday || isNextMonday;
     const morueWarning = isMoruePeriod ? "<br><b style='color: #f87171;'>⚠️ PAS DE VIT D / OMEGA 3</b>" : "";
-    const diffDaysSelected = Math.round((d - installDate) / (1000 * 60 * 60 * 24));
-    const cycleJ = ((diffDaysSelected % 3) + 1);
-    const nextCycleJ = (((diffDaysSelected + 1) % 3) + 1);
+    
     const refMonday = new Date(2026, 4, 4);
     const weekOffset = Math.floor(Math.floor((d - refMonday) / (24 * 60 * 60 * 1000)) / 7);
-    const currentBase = (Math.abs(weekOffset) % 2 === 0) ? "Sarrasin" : "Son d'avoine";
+    const currentBase = (Math.abs(weekOffset) % 2 === 0) ? "Avoine ou Sarrasin/Orge/Epeautre" : "Son d'avoine";
 
     document.getElementById('date-label').innerText = d.toLocaleDateString('fr-FR', {weekday: 'long', day: 'numeric', month: 'long'});
 
     const blocks = [
-        { title: "Starter", time: 0, text: "<b>Réveil :</b> Brossage de langue\n" + (dOfWeek === 0 || dOfWeek === 6 ? "<b>T-60min :</b> Vitamine B, Magnesium, 1,5g Taurine, 5g Créatine, 3g TMG\nAvec un grand verre d'eau citronnée\n" : "<b>T-30min :</b> 5g créatine + 1,5g + 2g TMG (+ vitamine B si pas possible en journée)\n Bu avec deux verres d'eau citronnée pour pousser avant psyllium\n") + "<b>T-20min :</b> Brossage de dent (BioMin F)" },
-        { title: "Petit Dej", time: 8, text: "<b>T-15min :</b> 20g Whey, 10g Collagène, Canelle\n<b>T-10min :</b> 10g Psyllium\n<b>Final :</b> Noix.<br><b>Jó étvágyat !</b>" },
-        { title: "Exercices Matin", time: 9, items: (dOfWeek === 0 || dOfWeek === 6) ? ["Jambes sur le dos", "Activité week-end"] : ["Jambes sur le dos", "SM System"], text: (dOfWeek === 0 || dOfWeek === 6) ? "<i style='font-size: 0.9em; color: #94a3b8;'>• 40min marche Z2 • (90/90 (5-10min)) • SM System full • Etirements quadriceps • (Etirements ischios / mollets) • (Spine twist (2x5 de chaque côté)) • Bird Dog (2x10) • Dead hang (30-60sec) • (Panenka)</i>" : "" },
+        { title: "Starter", time: 0, text: "<b>Réveil :</b> Brossage de langue\n" + (dOfWeek === 0 || dOfWeek === 6 ? "<b>T-60min :</b> Vitamine B, Magnesium, 1,5g Taurine, 5g Créatine\n" : "<b>T-30min :</b> 5g créatine + 1,5g Taurine + 2g TMG (+ vitamine B si pas possible en journée)\n") + "<b>T-20min :</b> Brossage de dents (BioMin F)" },
+        { title: "Petit Dej", time: 8, text: "<b>T-15min :</b> 20g Whey, 10g Collagène, Canelle\n<b>T-14min :</b> 10g Psyllium\n<b>Final :</b> Noix.<br><b>Jó étvágyat !</b>" },
+        { title: "Exercices Matin", time: 9, items: (dOfWeek === 0 || dOfWeek === 6) ? ["Jambes sur le dos", "Activité week-end"] : ["Jambes sur le dos", "SM System"], text: (dOfWeek === 0 || dOfWeek === 6) ? "<i style='font-size: 0.9em; color: #94a3b8;'>• 40min marche Z2 • Panenka • SM System full • Bird Dog • Spine twist • Dead hang • 90/90</i>" : "" },
         { title: "CHIN TUCK!!!", time: 9.5, text: "Posture cervicale", isUrgent: true },
         { title: "Étirements Matin", time: 10, items: ["Bras tendus", "Cou/Panenka", "Encadrement porte", "Grip 3x10s", "Ronds tête"] },
         { title: "CHIN TUCK!!!", time: 10.5, text: "Posture cervicale", isUrgent: true },
         { title: "Déjeuner", time: 11, 
           text: ((dOfWeek === 0 || dOfWeek === 6) 
-                ? "Berbérine (T-5min), Vitamine D + Omega 3" 
-                : "11h : vitamine B + Mg + TMG avec un grand verre d'eau<br><br>Berbérine (T-5min), Vitamine D + Omega 3") + morueWarning 
+                ? "Berbérine, Vitamine D + Omega 3" 
+                : "11h : vitamine B + Mg avec un grand verre d'eau<br><br>Berbérine, Vitamine D + Omega 3") + morueWarning 
         },
         { title: "CHIN TUCK!!!", time: 13, text: "Posture cervicale", isUrgent: true },
         { title: "Étirements Après-midi", time: 15, items: ["Bras tendus", "Cou/Panenka", "Encadrement porte", "Grip 3x10s", "Ronds tête"] },
-        { title: "Sport Soir", time: 17, items: ["15min 90/90", "15min SM System","Bird dog (10x par côté)", "20min Force", "Ischios élastique", "Spine twist", "Brique omoplates", "Dead Hang"] },
-        { title: "Détails Force (Info)", time: 17, text: `1. <b>Gobelet Squat :</b> 3x12 (dos droit).\n2. <b>Fentes :</b> 3x20.\n3. <b>Rowing avec appui :</b> 3x12/bras.\n4. <b>Pont Fessier :</b> 2x15.\n5. <b>Planche :</b> 3 x 10s. actives.\n6. <b>Swan dive` },
+        { title: "Sport Soir", time: 17, items: ["15min 90/90", "15min SM System", "20min Force", "Ischios élastique", "Spine twist", "Brique omoplates", "Dead Hang"] },
+        { title: "Détails Force (Info)", time: 17, text: `1. <b>Gobelet Squat :</b> 3x12.\n2. <b>Fentes :</b> 3x20.\n3. <b>Rowing :</b> 3x12/bras.\n4. <b>Pont Fessier :</b> 2x15.\n5. <b>Planche :</b> 3 x 10s. actives.\n6. <b>Swan dive` },
         { title: "Dîner", time: 19, 
           text: ((dOfWeek === 5 || dOfWeek === 6) 
-                ? "<b>Fromage + psyllium :</b>Germes de blé dans l'après-midi avec Omega 3 (16h)\n<b>Fromage :</b>Berbérine 5-10min avant le psyllium, 10g de Psyllium 10-15min avant le fromage\n<b>T+2/3h :</b> 2x Magnesium + 3g TMG + 1,5g Taurine + 10g collagène\n\n<b>T+45 :</b> " + (cycleJ === 3 ? "3cac bombées de graines de courges" : "20g de germes de blé") + " + 100g yaourt + 50g kéfir" 
+                ? "<b>Fromage :</b> T-30min Berbérine, T-20min 10g de Psyllium avec beaucoup d'eau\n<b>T+2/3h :</b> 2x Magnesium + 1,5g TMG + 1,5g Taurine + 10g collagène\n\n<b>T+45 :</b> 3cac bombées de germes de blé + 100g yaourt et kéfir" 
                 : (dOfWeek === 0 
-                    ? (dOfMonth <= 7 ? "Foie de morue" : "Sardines") + "\n\n<b>T+45 :</b> " + (cycleJ === 3 ? "3cac bombées de graines de courges" : "20g de germes de blé") + " + 100g yaourt + 50g kéfir" 
-                    : "<b>T-15min :</b> berbérine\n<b>T-10min :</b> Lin + yaourt\n<b>T-5min :</b> Vinaigre\n<b>T-0min :</b> Pâtes + Levure + Omega 3\n<b>T+2 :</b> Rinçage alcalin\n\n<b>T+45 :</b> " + (cycleJ === 3 ? "3cac bombées de graines de courges" : "20g de germes de blé") + " + 100g yaourt + 50g kéfir")) + morueWarning 
+                    ? (dOfMonth <= 7 ? "Foie de morue" : "Sardines") + "\n\n<b>T+45 :</b> 3cac bombées de germes de blé + 100g yaourt et kéfir" 
+                    : "<b>T-15min :</b> berbérine\n<b>T-10min :</b> Lin + yaourt\n<b>T-5min :</b> Vinaigre\n<b>T-0min :</b> Pâtes + Levure + Omega 3\n<b>T+2 :</b> Rinçage alcalin\n\n<b>T+45 :</b> 3cac bombées de germes de blé + 100g yaourt et kéfir")) + morueWarning 
         },
         { title: "Préparation Petit Dej", 
           time: 20, 
           items: ["Prêt"], 
           text: "• <b>Base :</b> " + currentBase + 
-                "\n• <b>Graines :</b> Chia, Lin" + (nextCycleJ === 3 ? " + Courge" : "") + 
+                "\n• <b>Graines :</b> Chia, Lin" + 
                 "\n• <b>Fruit :</b> Myrtilles\n• <b>Liquide :</b> Kéfir + Podmasli" + 
                 (dOfWeek >= 0 && dOfWeek <= 4 ? "<br><br>• <b>Prépa D+1 :</b> Vit B, Mg, Berbérine, Vit D, Omega 3" : "") 
         },
@@ -68,7 +66,6 @@ function updateApp(selectedDate) {
     container.innerHTML = '';
     blocks.forEach((b) => {
         const div = document.createElement('div');
-        // Application d'une couleur différente (orange ambré) si isUrgent est vrai
         const bgColor = b.isUrgent ? 'background: #b45309; border-left: 4px solid #f59e0b;' : '';
         div.className = 'block' + (isActuallyToday && today.getHours() >= b.time ? ' active' : '');
         if (b.isUrgent) div.setAttribute('style', bgColor);
