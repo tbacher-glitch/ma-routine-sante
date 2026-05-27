@@ -30,7 +30,7 @@ function updateApp(selectedDate) {
     document.getElementById('date-label').innerText = d.toLocaleDateString('fr-FR', {weekday: 'long', day: 'numeric', month: 'long'});
 
     const blocks = [
-        { title: "Starter", time: 0, text: "<b>Réveil :</b> Brossage de langue\n" + (dOfWeek === 0 || dOfWeek === 6 ? "<b>T-60min :</b> Vitamine B, Magnesium, 1,5g Taurine, 5g Créatine\n" : "<b>T-30min :</b> 5g créatine + 1,5g Taurine + 2g TMG (+ vitamine B si pas possible en journée)\n") + "<b>T-20min :</b> Brossage de dents (BioMin F)" },
+        { title: "Starter", time: 0, text: "<b>Réveil :</b> Brossage de langue\n" + (dOfWeek === 0 || dOfWeek === 6 ? "<b>T-60min :</b> Vitamine B, Magnesium, 1,5g Taurine, 5g Créatine\n" : "<b>T-30min :</b> 5g créatine + 1,5g Taurine + 2g TMG (+ vitamine B si pas possible en journée)\n") + "<b>T-20min :</b> Brossage de dents (BioMin F), crème peau" },
         { title: "Petit Dej", time: 8, text: "<b>T-15min :</b> 20g Whey, 10g Collagène, Canelle\n<b>T-14min :</b> 10g Psyllium\n<b>Final :</b> Noix.<br><b>Jó étvágyat !</b>" },
         { title: "Exercices Matin", time: 9, items: (dOfWeek === 0 || dOfWeek === 6) ? ["Jambes sur le dos", "Activité week-end"] : ["Jambes sur le dos", "SM System"], text: (dOfWeek === 0 || dOfWeek === 6) ? "<i style='font-size: 0.9em; color: #94a3b8;'>• 40min marche Z2 • Panenka • SM System full • Bird Dog • Spine twist • Dead hang • 90/90</i>" : "" },
         { title: "CHIN TUCK!!!", time: 9.5, text: "Posture cervicale", isUrgent: true },
