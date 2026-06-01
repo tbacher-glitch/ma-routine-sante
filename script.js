@@ -47,7 +47,7 @@ function updateApp(selectedDate) {
         { title: "Détails Force (Info)", time: 17, text: `1. <b>Gobelet Squat :</b> 3x12.\n2. <b>Fentes :</b> 3x20.\n3. <b>Rowing :</b> 3x12/bras.\n4. <b>Pont Fessier :</b> 2x15.\n5. <b>Planche :</b> 3 x 10s. actives.\n6. <b>Swan dive` },
         { title: "Dîner", time: 19, 
           text: ((dOfWeek === 5 || dOfWeek === 6) 
-                ? "<b>Fromage :</b> T-30min Berbérine, T-20min 10g de Psyllium avec beaucoup d'eau\n<b>T+2/3h :</b> 2x Magnesium + 1,5g TMG + 1,5g Taurine + 10g collagène\n\n<b>T+45 :</b> 3cac bombées de germes de blé + 100g yaourt et kéfir" 
+                ? "<b>Fromage :</b> T-30min Berbérine, T-20min 10g de Psyllium avec beaucoup d'eau\n<b>T+2/3h :</b> 2x Magnesium + 1,5g TMG + 1,5g Taurine + 10g collagène (eau tiède)\n\n<b>T+45 :</b> 3cac bombées de germes de blé + 100g yaourt et kéfir" 
                 : (dOfWeek === 0 
                     ? (dOfMonth <= 7 ? "Foie de morue" : "Sardines") + "\n\n<b>T-20 :</b> berbérine <b>\nT-15 :</b> 3cac bombées de germes de blé + 50g yaourt et kéfir + 5g collagène + Acérola" 
                     : "<b>T-20min :</b> berbérine\n<b>T-15min :</b> Lin + germes de blé + yaourt + Omega 3\n<b>T-2min :</b> Vinaigre\n<b>T-0min :</b> Pâtes + Levure\n<b>T+2 :</b> Rinçage alcalin\n\n<b>Sans pâtes :</b> rajouter 5g collagène + Acérola")) + morueWarning 
