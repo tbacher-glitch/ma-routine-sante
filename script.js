@@ -43,7 +43,7 @@ function updateApp(selectedDate) {
         },
         { title: "CHIN TUCK!!!", time: 13, text: "Posture cervicale", isUrgent: true },
         { title: "Étirements Après-midi", time: 15, items: ["Bras tendus", "Cou/Panenka", "Encadrement porte", "Grip 3x10s", "Ronds tête"] },
-        { title: "Sport Soir", time: 17, items: ["15min 90/90", "15min SM System", "20min Force", "Ischios élastique", "Spine twist", "Brique omoplates", "Dead Hang"] },
+        { title: "Sport Soir", time: 17, items: ["15min 90/90", "15min SM System", "Chevalier","20min Force", "Ischios élastique", "Spine twist", "Brique omoplates", "Dead Hang"] },
         { title: "Détails Force (Info)", time: 17, text: `1. <b>Gobelet Squat :</b> 3x12.\n2. <b>Fentes :</b> 3x20.\n3. <b>Rowing :</b> 3x12/bras.\n4. <b>Pont Fessier :</b> 2x15.\n5. <b>Planche :</b> 3 x 10s. actives.\n6. <b>Swan dive` },
         { title: "Dîner", time: 19, 
           text: ((dOfWeek === 5 || dOfWeek === 6) 
