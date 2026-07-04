@@ -60,7 +60,7 @@ function updateApp(selectedDate) {
                 "\n• <b>Fruit :</b> Myrtilles\n• <b>Liquide :</b> Kéfir + Podmasli" + 
                 (dOfWeek >= 0 && dOfWeek <= 4 ? "<br><br>• <b>Prépa D+1 :</b> Berbérine, Vit D, Omega 3" : "") 
         },
-        { title: "Soir", time: 21, text: "Magnesium + Spermidine (sauf w-e) à 21h45\n Brosse à dents interdentaire\n Exercice jambes sur le dos\n Couette entre les genoux" }
+        { title: "Soir", time: 21, text: "Magnesium\n Brosse à dents interdentaire\n Exercice jambes sur le dos\n Couette entre les genoux" }
     ];
 
     container.innerHTML = '';
@@ -185,3 +185,4 @@ function scrollToCurrentTask() {
 
 updateApp(todayClean);
 renderNav();
+
