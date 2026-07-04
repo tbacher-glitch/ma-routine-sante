@@ -32,7 +32,7 @@ function updateApp(selectedDate) {
     const blocks = [
         { title: "Starter", time: 0, text: "<b>Réveil :</b> Brossage de langue\n" + (dOfWeek === 0 || dOfWeek === 6 ? "<b>T-60min :</b> Vitamine B, Magnesium, 1,5g Taurine, 5g Créatine\n" : "<b>T-30min :</b> 5g créatine + 1,5g Taurine + 2g TMG (+ vitamine B si pas possible en journée)\n") + "<b>T-20min :</b> Brossage de dents (BioMin F), crème peau" },
         { title: "Petit Dej", time: 8, text: "<b>T-15min :</b> 25g Whey, 10g Collagène, Canelle, Yaourt Selský\n<b>T-10min :</b> 10g Psyllium\n<b>Final :</b> Noix.<br><b>Jó étvágyat !</b>" },
-        { title: "Exercices Matin", time: 9, items: (dOfWeek === 0 || dOfWeek === 6) ? ["Jambes sur le dos", "Activité week-end"] : ["Jambes sur le dos", "SM System"], text: (dOfWeek === 0 || dOfWeek === 6) ? "<i style='font-size: 0.9em; color: #94a3b8;'>• 40min marche Z2 • Panenka • SM System full • Bird Dog • Spine twist • Dead hang • 90/90</i>" : "" },
+        { title: "Exercices Matin", time: 9, items: (dOfWeek === 0 || dOfWeek === 6) ? ["Jambes sur le dos", "Activité week-end"] : ["Jambes sur le dos", "SM System"], text: (dOfWeek === 0 || dOfWeek === 6) ? "<i style='font-size: 0.9em; color: #94a3b8;'>• 40min marche Z2 • Panenka • SM System full • Chevalier• Bird Dog • Spine twist • Dead hang • 90/90</i>" : "" },
         { title: "CHIN TUCK!!!", time: 9.5, text: "Posture cervicale", isUrgent: true },
         { title: "Étirements Matin", time: 10, items: ["Bras tendus", "Cou/Panenka", "Encadrement porte", "Grip 3x10s", "Ronds tête"] },
         { title: "CHIN TUCK!!!", time: 10.5, text: "Posture cervicale", isUrgent: true },
@@ -47,10 +47,10 @@ function updateApp(selectedDate) {
         { title: "Détails Force (Info)", time: 17, text: `1. <b>Gobelet Squat :</b> 3x12.\n2. <b>Fentes :</b> 3x20.\n3. <b>Rowing :</b> 3x12/bras.\n4. <b>Pont Fessier :</b> 2x15.\n5. <b>Planche :</b> 3 x 10s. actives.\n6. <b>Swan dive` },
         { title: "Dîner", time: 19, 
           text: ((dOfWeek === 5 || dOfWeek === 6) 
-                ? "<b>Fromage :</b> T-30min Berbérine, T-20min 10g de Psyllium avec beaucoup d'eau\n<b>T+2/3h :</b> 2x Magnesium + 1,5g TMG + 1,5g Taurine + 10g collagène (eau tiède)\n\n<b>T+45 :</b> 3cac bombées (20g) de germes de blé + 100g yaourt et kéfir" 
+                ? "<b>Fromage :</b> T-30min Berbérine, T-20min 10g de Psyllium avec beaucoup d'eau\n<b>T+2/3h :</b> 2x Magnesium + 1,5g TMG + 1,5g Taurine + 10g collagène (eau tiède)" 
                 : (dOfWeek === 0 
-                    ? (dOfMonth <= 7 ? "Foie de morue" : "Sardines") + "\n\n<b>T-20 :</b> berbérine <b>\nT-15 :</b> 3cac bombées de germes de blé + 50g yaourt et kéfir + 5g collagène + Acérola" 
-                    : "<b>T-20min :</b> berbérine\n<b>T-15min :</b> Lin + 20g germes de blé + yaourt + Omega 3\n<b>T-2min :</b> Vinaigre\n<b>T-0min :</b> Pâtes + Levure\n<b>T+2 :</b> Rinçage alcalin\n\n<b>Sans pâtes :</b> rajouter 5g collagène + Acérola")) + morueWarning 
+                    ? (dOfMonth <= 7 ? "Foie de morue" : "Sardines") + "\n\n<b>T-20 :</b> berbérine" 
+                    : "<b>T-20min :</b> berbérine\n<b>T-15min :</b> Lin  + yaourt + Omega 3\n<b>T-2min :</b> Vinaigre\n<b>T-0min :</b> Pâtes + Levure\n<b>T+2 :</b> Rinçage alcalin")) + morueWarning 
         },
         { title: "Préparation Petit Dej", 
           time: 20, 
@@ -58,9 +58,9 @@ function updateApp(selectedDate) {
           text: "• <b>Base :</b> " + currentBase + 
                 "\n• <b>Graines :</b> Lin" + 
                 "\n• <b>Fruit :</b> Myrtilles\n• <b>Liquide :</b> Kéfir + Podmasli" + 
-                (dOfWeek >= 0 && dOfWeek <= 4 ? "<br><br>• <b>Prépa D+1 :</b> Vit B, Mg, Berbérine, Vit D, Omega 3" : "") 
+                (dOfWeek >= 0 && dOfWeek <= 4 ? "<br><br>• <b>Prépa D+1 :</b> Berbérine, Vit D, Omega 3" : "") 
         },
-        { title: "Soir", time: 21, text: "Magnesium\n Brosse à dents interdentaire\n Exercice jambes sur le dos\n Couette entre les genoux" }
+        { title: "Soir", time: 21, text: "Magnesium + Spermidine (sauf w-e) à 21h45\n Brosse à dents interdentaire\n Exercice jambes sur le dos\n Couette entre les genoux" }
     ];
 
     container.innerHTML = '';
@@ -185,4 +185,3 @@ function scrollToCurrentTask() {
 
 updateApp(todayClean);
 renderNav();
-
